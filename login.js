@@ -6,6 +6,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import LoginScreen from './auth'
+import CalendarPage from'./Calendar'
+import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -18,6 +20,7 @@ function Home() {
       </View>
     );
   }
+
   
 function HomeScreen() {
     return (
@@ -26,24 +29,35 @@ function HomeScreen() {
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
   
-              if (route.name === 'Home') {
+              if (route.name === 'Traitement') {
                 iconName = focused
-                  ? 'ios-information-circle'
-                  : 'ios-information-circle-outline';
-              } else if (route.name === 'Settings') {
-                iconName = focused ? 'ios-list' : 'ios-list-outline';
+                  ? 'heart-circle-outline'
+                  : 'heart-outline'
+              } else if (route.name === '???') {
+                iconName = focused ? 'medkit-outline' : 'medkit-outline';
+              }
+              else if (route.name==='Profil'){
+                iconName = focused ?'person-outline' : 'person-outline';
+              }
+              else if (route.name==='Calendrier'){
+                iconName= focused?'calendar-outline' : 'calendar-outline'
+              }
+              else if (route.name==='Paramètres'){
+                iconName = focused?'cog-outline' : 'cog-outline';
               }
   
               // You can return any component that you like here!
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: 'tomato',
-            tabBarInactiveTintColor: 'gray',
+            tabBarActiveTintColor: '#85C1E9',
+            tabBarInactiveTintColor: '#95A5A6',
             
           })}
         >
-          <Tab.Screen name="Home" component={Home} options={{headerShown:false}} />
-          <Tab.Screen name="Settings" component={Home} />
+          <Tab.Screen name="Traitement" component={Home} options={{headerShown:false}} />
+          <Tab.Screen name="Calendrier" component={CalendarPage} />
+          <Tab.Screen name="Profil" component={Home} />
+          <Tab.Screen name="Paramètres" component={Home} />
         </Tab.Navigator>
     );
 }

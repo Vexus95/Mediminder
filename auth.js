@@ -17,28 +17,34 @@ function LoginScreen({navigation}) {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
+      <Text style={styles.title}>Se connecter</Text>
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="Email."
-          placeholderTextColor="#003f5c"
+          placeholder="E-mail"
+          placeholderTextColor="#B2BABB"
           onChangeText={(email) => setEmail(email)}
         /> 
       </View> 
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="Password."
-          placeholderTextColor="#003f5c"
+          placeholder="Mot de passe"
+          placeholderTextColor="#B2BABB"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         /> 
       </View> 
+      
       <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text> 
+        <Text style={styles.forgot_button}>Mot de passe oublié?</Text> 
       </TouchableOpacity> 
       <TouchableOpacity style={styles.loginBtn} onPress={()=>navigation.navigate('Home')}>
-        <Text style={styles.loginText}>LOGIN</Text> 
+        <Text style={styles.loginText}>Connexion</Text> 
+      </TouchableOpacity> 
+      <Text style={styles.Or}>Ou</Text> 
+      <TouchableOpacity style={styles.loginBtn2} onPress={()=>navigation.navigate('Home')}>
+        <Text style={styles.loginText}>Créer un compte</Text> 
       </TouchableOpacity> 
     </View> 
   );
@@ -58,7 +64,6 @@ const styles = StyleSheet.create({
     width: "70%",
     height: 45,
     marginBottom: 20,
-    alignItems: "center",
     borderColor:'#AFF2F2',
     borderRadius:5,
     borderWidth:2,
@@ -83,6 +88,28 @@ const styles = StyleSheet.create({
     backgroundColor: "#AFF2F2",
     borderRadius:5,
   },
+  loginBtn2: {
+    width: "70%",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    borderRadius:5,
+    borderWidth:2,
+    borderColor:'#2980B9'
+  },
+  title:{
+    fontSize:25,
+    marginBottom:30,
+    color:'#2980B9'
+  },
+  loginText:{
+    color:'#2980B9',
+  },
+
+  Or:{
+    marginTop:10,
+  }
 });
 
 export default LoginScreen 
