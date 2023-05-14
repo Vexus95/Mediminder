@@ -1,5 +1,3 @@
-
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -10,14 +8,16 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
-
+import {CalendarList} from 'react-native-calendars'
 
 function CalendarPage(){
     return (
         <View>
             <Text>Salut</Text>
             <CalendarList
-            onVisibleMonthsChange={(months)}
+            onVisibleMonthsChange={months=> {
+                console.log(months);
+            }}
 
             pastScrollRange={50}
 
