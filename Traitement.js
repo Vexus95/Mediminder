@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React,{useState} from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, View ,TextInput,TouchableOpacity,Keyboard} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -9,24 +9,59 @@ import LoginScreen from './auth'
 import CalendarPage from'./Calendar'
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 import Task from './medicament'
+import add_med from './Addmeds';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 //navbar
 function Traitement() {
+  const[medicament,setMedicament] = useState();
+  const[medItem,setMedItem] = useState([]);
+
+  const handleAddMeds=()=>{
+    Keyboard.dismiss();
+    setMedItem([...medItem,medicament])
+    setMedicament(null);
+  }
+
+  const deleteMed = (index) =>{
+    let itemsCopy=[...medItem]; 
+    itemsCopy.splice(index,1);
+    setMedItem(itemsCopy);
+  }
     return (
       <View style={styles.container}>
         <View style={styles.taskWrapper}>
           <View style={styles.items}>
-            {/* c'est la ou y'aura tes meédocs */}
-            <Task text={'Médicament 1'}/>
-            <Task text={'Médicament 2'}/>
-            <Task/>
-            <Task/>
-            <Task/>
+            {
+              medItem.map((item,index)=>{
+                return (
+                  <TouchableOpacity key={index} onPress={()=>deleteMed(index)}>
+                    <Task text={item}/>
+                  </TouchableOpacity>
+
+                )
+              })
+            }
           </View>
         </View>
+        {/* Ajouter un traitement */}
+        <KeyboardAvoidingView
+          behavior = {Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.writeTaskWrapper}>
+
+          <TextInput style={styles.input} placeholder={'Ajoutez un traitement'} value={medicament} onChangeText={text=>setMedicament(text)}/>
+
+          <TouchableOpacity onPress={() => handleAddMeds()}>
+              <View style={styles.addWrapper}>
+                <Text style={styles.addText}>+</Text>
+              </View>
+          </TouchableOpacity>
+          </KeyboardAvoidingView>
+
+
+
       </View>
     );
   }
@@ -43,6 +78,36 @@ const styles = StyleSheet.create({
   },
   items:{
     marginTop:-30,
+  },
+  writeTaskWrapper:{
+    position:'absolute',
+    bottom:60,
+    width:'100%',
+    flexDirection:'row',
+    justifyContent:'space-around',
+    alignItems:'center'
+  },
+  input:{
+    paddingVertical:15,
+    paddingHorizontal:15,
+    width:250,
+    backgroundColor:'#EBF5FB',
+    borderRadius:60,
+    borderColor:'#2980B9',
+    borderWidth:1,
+  },
+  addWrapper:{
+    width:60,
+    height:60,
+    backgroundColor:'#EBF5FB',
+    borderRadius:60,
+    justifyContent:'center',
+    alignItems:'center',
+    borderColor:'#2980B9',
+    borderWidth:1,
+  },
+  addText:{
+
   },
 })
 export default Traitement;
