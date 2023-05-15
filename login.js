@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import LoginScreen from './auth'
 import CalendarPage from'./Calendar'
+import Traitement from './Traitement';
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 
 const Stack = createNativeStackNavigator();
@@ -29,7 +30,7 @@ function HomeScreen() {
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
   
-              if (route.name === 'Traitement') {
+              if (route.name === 'Mes Traitements') {
                 iconName = focused
                   ? 'heart-circle-outline'
                   : 'heart-outline'
@@ -54,7 +55,11 @@ function HomeScreen() {
             
           })}
         >
-          <Tab.Screen name="Traitement" component={Home} options={{headerShown:false}} />
+          <Tab.Screen name="Mes Traitements" component={Traitement} 
+            options={{
+              headerStyle:{backgroundColor:'#AFF2F2'},
+              headerTitleAlign:'center',
+              }} />
           <Tab.Screen name="Calendrier" component={CalendarPage} />
           <Tab.Screen name="Profil" component={Home} />
           <Tab.Screen name="Paramètres" component={Home} />
