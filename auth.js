@@ -43,7 +43,7 @@ function LoginScreen({navigation}) {
         <Text style={styles.loginText}>Connexion</Text> 
       </TouchableOpacity> 
       <Text style={styles.Or}>Ou</Text> 
-      <TouchableOpacity style={styles.loginBtn2} onPress={()=>navigation.navigate('Home')}>
+      <TouchableOpacity style={styles.loginBtn2} onPress={()=>navigation.navigate('Login')}>
         <Text style={styles.loginText}>Créer un compte</Text> 
       </TouchableOpacity> 
     </View> 

@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import LoginScreen from './auth'
 import CalendarPage from'./Calendar'
 import Traitement from './Traitement';
+import AddForm from './addMeds';
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 
 const Stack = createNativeStackNavigator();
@@ -76,6 +77,7 @@ function Auth(props) {
             >
                 <Stack.Screen name="Login" component={LoginScreen}/>    
                 <Stack.Screen name="Home" component={HomeScreen}/>
+                <Stack.Screen name="addMed" component={AddForm}/>
             </Stack.Navigator>
            </NavigationContainer>
     );

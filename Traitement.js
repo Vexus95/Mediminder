@@ -9,13 +9,12 @@ import LoginScreen from './auth'
 import CalendarPage from'./Calendar'
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 import Task from './medicament'
-import add_med from './Addmeds';
-
+import addForm from './addMeds';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 //navbar
-function Traitement() {
+function Traitement({navigation}) {
   const[medicament,setMedicament] = useState();
   const[medItem,setMedItem] = useState([]);
 
@@ -53,7 +52,7 @@ function Traitement() {
 
           <TextInput style={styles.input} placeholder={'Ajoutez un traitement'} value={medicament} onChangeText={text=>setMedicament(text)}/>
 
-          <TouchableOpacity onPress={() => handleAddMeds()}>
+          <TouchableOpacity onPress={()=>navigation.navigate('addMed')}>
               <View style={styles.addWrapper}>
                 <Text style={styles.addText}>+</Text>
               </View>

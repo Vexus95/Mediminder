@@ -7,12 +7,15 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Auth from './login';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
 export default function App(){
   return(
-    <Auth />
+    <SafeAreaInsetsContext>
+      <Auth />
+    </SafeAreaInsetsContext>
   )
 }
 // //navbar
