@@ -13,7 +13,6 @@ import {CalendarList} from 'react-native-calendars'
 function CalendarPage(){
     return (
         <View>
-            <Text>Salut</Text>
             <CalendarList
             onVisibleMonthsChange={months=> {
                 console.log(months);

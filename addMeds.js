@@ -1,27 +1,106 @@
-import{StatusBar, StyleSheet,Text,TextInput,View,TouchableOpacity} from 'react-native';
+import{Alert,StatusBar,Button, StyleSheet,Text,TextInput,View,TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
+import {Formik,Form,Field} from "formik";
+import * as Yup from 'yup';
+import {DayPicker} from 'react-native-picker-weekday'
 
+const AddMedSchema = Yup.object().shape({
+    med_name: Yup.string()
+        .min(2,'Invalide, trop court')
+        .max(50,'Invalide, trop long')
+        .required('Champs requis'),
+    heure:Yup.string()
+        .required("Champs requis"),
 
-function AddForm(){
+})
+
+const SampleApp = ({weekdays, setWeekdays}) => {
     return (
+      <DayPicker
+        weekdays={weekdays}
+        setWeekdays={setWeekdays}
+        activeColor='#2980B9'
+        textColor='white'
+        inactiveColor='#BFC9CA'
+      />
+    )
+  }
+
+
+
+
+function AddForm({navigation}){
+    const [weekdays, setWeekdays] = React.useState([])
+    return (
+
+
+        <Formik initialValues={{
+            med_name:'',
+            heure:'',
+        }}
+        validationSchema={AddMedSchema}
+        onSubmit={async (values) => {
+                values.date = weekdays
+                const jsonValue = await AsyncStorage.getItem('traitementList')
+                let traitementList = jsonValue != null ? JSON.parse(jsonValue) : null;
+                console.log(traitementList)
+
+                if (traitementList == null) {
+                    traitementList = [values]
+                } else {
+                    traitementList.push(values)
+                }
+                await AsyncStorage.setItem(
+                    'traitementList',
+                    JSON.stringify(traitementList)
+                );
+                navigation.navigate('Home')}
+            }
+        >
+            {({values,errors,touched,handleChange,setFieldTouched,isValid,handleSubmit}) =>(
+
+            
         <View style ={styles.wrapper}>
             <StatusBar barStyle={'light-content'}/>
             <View style={styles.formContainer}>
                 <Text style={styles.title}> Ajoutez votre médicament </Text>
                 <View style={styles.inputWrapper}>
-                    <TextInput style ={styles.inputStyle} placeholder='Nom du médicament'/>
+                    <TextInput 
+                        style ={styles.inputStyle} 
+                        placeholder='Nom du médicament' 
+                        value={values.med_name}
+                        onChangeText={handleChange('med_name')} 
+                        onBlur={()=>setFieldTouched('med_name')}   
+                    />
+                    {errors.med_name && (
+                        <Text style={styles.errorTxt}>{errors.med_name}</Text>
+                    )}
                 </View>
+                <SampleApp weekdays={weekdays} setWeekdays={setWeekdays}/>
+                  {errors.days && (
+                    <Text style={styles.errorTxt}>{values.days}</Text>
+                )}    
+                
                 <View style={styles.inputWrapper}>
-                    <TextInput style ={styles.inputStyle} placeholder='Jours'/>
+                    <TextInput 
+                    style ={styles.inputStyle} 
+                    placeholder='Heure'
+                    value={values.heure}
+                    onChangeText={handleChange('heure')}  
+                    onBlur={()=>setFieldTouched('heure')} />
+                    {errors.heure && (
+                        <Text style={styles.errorTxt}>{errors.heure}</Text>
+                    )}
                 </View>
-                <View style={styles.inputWrapper}>
-                    <TextInput style ={styles.inputStyle} placeholder='Heure'/>
-                </View>
-                <TouchableOpacity onPress={() => {}} style={styles.submitBtn}>
+                {/* <TouchableOpacity onPress={handleSubmit} style={styles.submitBtn}>
                     <Text style={styles.submitBtnTxt}>Ajouter</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                <Button onPress={handleSubmit} title='Ajouter' style={styles.submitBtn}/>
             </View>
         </View>
+        )}
+        </Formik>
     )
 }
 
@@ -53,9 +132,12 @@ const styles=StyleSheet.create({
         padding:10,
         borderColor:'#2980B9'
     },
+    dateStyle:{
+        padding:10,
+    },
     errorTxt:{
         fontSize:12,
-        color:'#FF0D10'
+        color:'red'
     },
     submitBtn:{
         padding:10,
