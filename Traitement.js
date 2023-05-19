@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, Text, View ,TextInput,TouchableOpacity,Keyboard} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -10,13 +10,42 @@ import CalendarPage from'./Calendar'
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 import Task from './medicament'
 import addForm from './addMeds';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const Calendar = ({weekdays}) => {
+  return (
+    <DayPicker
+      weekdays={weekdays}
+      activeColor='#2980B9'
+      textColor='white'
+      inactiveColor='#BFC9CA'
+    />
+  )
+}
+
+const TraitementItem = ({traitementItem, index, deletedMed}) => {
+  return (
+    <TouchableOpacity key={index} onPress={() => deletedMed(index)}>
+      <Task text={traitementItem.med_name} />
+      <Task text={traitementItem.heure} />
+      <Calendar weekdays={traitementItem.date} />
+    </TouchableOpacity>
+  )
+}
 
 //navbar
 function Traitement({navigation}) {
   const[medicament,setMedicament] = useState();
   const[medItem,setMedItem] = useState([]);
+  const[traitementList, setTraitementList] = useState([]);
+
+  useEffect(async () => {
+    const jsonValueString = await AsyncStorage.getItem('traitementList');
+    setTraitementList(jsonValue != null ? JSON.parse(jsonValueString) : [])
+  });
 
   const handleAddMeds=()=>{
     Keyboard.dismiss();
@@ -34,12 +63,12 @@ function Traitement({navigation}) {
         <View style={styles.taskWrapper}>
           <View style={styles.items}>
             {
-              medItem.map((item,index)=>{
+              traitementList.map((item,index)=>{
                 return (
-                  <TouchableOpacity key={index} onPress={()=>deleteMed(index)}>
-                    <Task text={item}/>
-                  </TouchableOpacity>
-
+                  // <TouchableOpacity key={index} onPress={()=>deleteMed(index)}>
+                  //   <Task text={item}/>
+                  // </TouchableOpacity>
+                  <TraitementItem traitementItem={item} index={index} deletedMed={deletedMed}  />
                 )
               })
             }
