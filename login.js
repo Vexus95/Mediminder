@@ -16,6 +16,7 @@ import SigninScreen from './create';
 import Profil from'./Profil'
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 import Page_Doctor from './Page_Doctor';
+import Parametres from './Parametres'
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -112,7 +113,10 @@ function HomeScreen({route}) {
               headerStyle:{backgroundColor:'#AFF2F2'},
               headerTitleAlign:'center',
               }} />
-          <Tab.Screen name="Paramètres" component={Home} />
+          <Tab.Screen name="Paramètres" component={Parametres}options={{
+              headerStyle:{backgroundColor:'#AFF2F2'},
+              headerTitleAlign:'center',
+              }}   />
         </Tab.Navigator>
     );
 }

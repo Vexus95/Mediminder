@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, View , ScrollView, TextInput,TouchableOpacity,Keyboard} from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, View , ScrollView, TextInput,TouchableOpacity,Keyboard,Alert} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -28,12 +28,21 @@ const Calendar = ({weekdays}) => {
 }
 
 const TraitementItem = ({traitementItem, index, deleteMed}) => {
+  let text
+
   return (
-    <TouchableOpacity key={index} onPress={() => deleteMed(index)}>
-      <Task text={traitementItem.med_name} />
-      <Task text={traitementItem.heure} />
-      <Calendar weekdays={traitementItem.date} />
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity key={index} onPress={() => deleteMed(index)}>
+        <Task text={traitementItem.med_name} />
+        <Task text={traitementItem.heure} />
+        <Calendar weekdays={traitementItem.date} />
+      </TouchableOpacity>
+      <Text>Avis médicament:</Text>
+      <TextInput placeholder='Ecrire ici' value={text}/>
+        <TouchableOpacity>
+        <Text style={styles.alertbutton} onPress={()=>Alert.alert('Avis envoyé')}>Envoyer</Text> 
+      </TouchableOpacity>
+    </View>
   )
 }
 
@@ -73,7 +82,6 @@ function Traitement({navigation}) {
   //   itemsCopy.splice(index,1);
   //   setMedItem(itemsCopy);
   // }
-
     return (
       <View style={styles.container}>
         <View style={styles.taskWrapper}>
@@ -88,8 +96,12 @@ function Traitement({navigation}) {
                 )
               })
             }
+
+             
           </ScrollView>
+          
         </View>
+        
         {/* Ajouter un traitement */}
         <KeyboardAvoidingView
           behavior = {Platform.OS === "ios" ? "padding" : "height"}
@@ -150,8 +162,14 @@ const styles = StyleSheet.create({
     borderColor:'#2980B9',
     borderWidth:1,
   },
-  addText:{
-
-  },
+  alertbutton:{
+    marginTop:10,
+    borderWidth:1,
+    textAlign:'center',
+    borderRadius:15,
+    borderColor:'#2980B9',
+    marginBottom:5
+    
+}
 })
 export default Traitement;

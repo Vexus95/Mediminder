@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, View , ScrollView, TextInput,TouchableOpacity,Keyboard} from 'react-native';
+import {Alert, KeyboardAvoidingView, Platform, StyleSheet, Text, View , ScrollView, TextInput,TouchableOpacity,Keyboard} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -22,7 +22,7 @@ const AccountItem = ({item, index}) => {
     if (item.Type != "Doctor") {
         return (
           
-          <TouchableOpacity key={index} style={styles.itemisation}>
+          <TouchableOpacity onPress={()=>Alert.alert('Avis du patient : Nul')} key={index} style={styles.itemisation}>
             <Text style={styles.text}>{item.Nom} </Text> 
             <Text>{item.Prenom} </Text> 
           </TouchableOpacity>
