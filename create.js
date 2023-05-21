@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import * as Yup from 'yup';
-import {Formik,Form,Field} from "formik";
+import {Formik,Form,Field,FieldProps} from "formik";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import SelectDropdown from 'react-native-select-dropdown'
 import {
   StyleSheet,
   Text,
@@ -12,8 +12,8 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
-  CheckBox,
 } from "react-native";
+
 
 
 const AddSingInSchema = Yup.object().shape({
@@ -42,13 +42,14 @@ const AddSingInSchema = Yup.object().shape({
 })
 
 function SigninScreen({navigation}) {
-  const  [isSelected,setSelection]=useState(false)
+    const type = ['Doctor','Patient']
   return (
     <Formik initialValues={{
         Email:'',
         Nom:'',
         Prenom:'',
         Mdp:'',
+        Type:''
     }}
      validationSchema={AddSingInSchema}
      onSubmit={async (values) => {
@@ -65,6 +66,7 @@ function SigninScreen({navigation}) {
             'AccountList',
             JSON.stringify(AccountList)
         );
+        console.log(AccountList)
         navigation.navigate('Login')}
     }
     >
@@ -123,17 +125,29 @@ function SigninScreen({navigation}) {
           onBlur={()=>setFieldTouched('Mdp')}
         /> 
       </View> 
-      <View style={styles.inputView}>
-        <CheckBox
-          value={isSelected}
-          onValueChange={setSelection}
-          style={styles.checkbox}
-        />
-        <Text>Docteur:</Text>
-      </View> 
       {errors.Mdp && (
         <Text style={styles.errorTxt}>{errors.Mdp}</Text>
       )} 
+        <View styles={styles.inputView}> 
+        <SelectDropdown
+            data={type}
+            onSelect={(selectedItem, index) => {
+                console.log(selectedItem, index)
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+                // text represented after item is selected
+                // if data array is an array of objects then return selectedItem.property to render after item is selected
+                values.Type = selectedItem
+                return selectedItem
+            }}
+            rowTextForSelection={(item, index) => {
+                // text represented for each item in dropdown
+                // if data array is an array of objects then return item.property to represent item in dropdown
+                return item
+            }}
+        />
+        </View>
+      
       <Button onPress={handleSubmit} title='Créer le compte' style={styles.Btn}/>
     </View> 
     )}

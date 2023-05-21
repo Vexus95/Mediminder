@@ -21,18 +21,22 @@ function LoginScreen({navigation}) {
   async function verif(){
     const jsonValueString = await AsyncStorage.getItem('AccountList')
     setAccountList(jsonValueString != null ? JSON.parse(jsonValueString) : [])
-    console.log(AccountList)
+    console.log("regarde ca : ", AccountList);
     var i = 0;
     console.log(email, " && ", password);
     // console.log("jz suis la ", email, " && ", password)
     for (;i != AccountList.length; i++)
     {
+      console.log(AccountList[i]);
       if (AccountList[i].Email === email && AccountList[i].Mdp === password){
-        navigation.navigate('Home', {i})
+        console.log("valide");
+        navigation.navigate('Home')
+        return;
       }
     }
     Alert.alert('Mot de passe ou mail incrorrect')
-
+    
+    // navigation.navigate('Home')
   }
   
   return (

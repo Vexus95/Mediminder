@@ -25,7 +25,7 @@ function Home() {
   }
 
   
-function HomeScreen(id) {
+ function HomeScreen() {
     return (
         <Tab.Navigator 
           screenOptions={({ route }) => ({
