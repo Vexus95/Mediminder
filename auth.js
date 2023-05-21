@@ -30,7 +30,7 @@ function LoginScreen({navigation}) {
       console.log(AccountList[i]);
       if (AccountList[i].Email === email && AccountList[i].Mdp === password){
         console.log("valide");
-        navigation.navigate('Home')
+        navigation.navigate('Home',{i})
         return;
       }
     }

@@ -1,16 +1,21 @@
 import * as React from 'react';
+import {useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import LoginScreen from './auth'
 import CalendarPage from'./Calendar'
 import Traitement from './Traitement';
 import AddForm from './addMeds';
 import SigninScreen from './create';
+import Profil from'./Profil'
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
+import Page_Doctor from './Page_Doctor';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -24,15 +29,49 @@ function Home() {
     );
   }
 
-  
- function HomeScreen() {
+function HomeScreen({route}) {
+  const[AccountList, setAccountList] = useState([]);
+  const[User, setUser] = useState(null);
+
+  const handleSetUser = async (user) => {
+    setUser(user);
+    const jsonValueString = await AsyncStorage.getItem("user");
+    if (jsonValueString != null) {
+      AsyncStorage.removeItem("User");
+    }
+    console.log("je set ça ", user);
+    AsyncStorage.setItem("User", JSON.stringify(user))
+  }
+
+  React.useEffect(() => {
+    if (AccountList == null || AccountList.length == 0) {
+      async function recup_user(){
+        const jsonValueString = await AsyncStorage.getItem('AccountList')
+        setAccountList(jsonValueString != null ? JSON.parse(jsonValueString) : [])
+        console.log("Salut",AccountList)
+      }
+      
+      const name = route.params;
+      id_user = name.i
+      recup_user()
+    } else {
+      handleSetUser(AccountList[id_user])
+    }
+  })
+
     return (
+      
         <Tab.Navigator 
+        
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
   
               if (route.name === 'Mes Traitements') {
+                iconName = focused
+                  ? 'heart-circle-outline'
+                  : 'heart-outline'
+              }else if (route.name === 'Mes Patients') {
                 iconName = focused
                   ? 'heart-circle-outline'
                   : 'heart-outline'
@@ -57,13 +96,22 @@ function Home() {
             
           })}
         >
+          
+          {User != null && User.Type==='Patient'?
           <Tab.Screen name="Mes Traitements" component={Traitement} 
             options={{
               headerStyle:{backgroundColor:'#AFF2F2'},
               headerTitleAlign:'center',
               }} />
+            :<Tab.Screen name="Mes Patients" component={Page_Doctor}
+            options={{
+              headerStyle:{backgroundColor:'#AFF2F2'},
+              headerTitleAlign:'center',}}  />}
           <Tab.Screen name="Calendrier" component={CalendarPage} />
-          <Tab.Screen name="Profil" component={Home} />
+          <Tab.Screen name="Profil" component={Profil} options={{
+              headerStyle:{backgroundColor:'#AFF2F2'},
+              headerTitleAlign:'center',
+              }} />
           <Tab.Screen name="Paramètres" component={Home} />
         </Tab.Navigator>
     );
