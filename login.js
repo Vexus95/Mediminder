@@ -9,6 +9,7 @@ import LoginScreen from './auth'
 import CalendarPage from'./Calendar'
 import Traitement from './Traitement';
 import AddForm from './addMeds';
+import SigninScreen from './create';
 import { ReloadInstructions } from 'react-native/Libraries/NewAppScreen';
 
 const Stack = createNativeStackNavigator();
@@ -24,7 +25,7 @@ function Home() {
   }
 
   
-function HomeScreen() {
+function HomeScreen(id) {
     return (
         <Tab.Navigator 
           screenOptions={({ route }) => ({
@@ -76,6 +77,7 @@ function Auth(props) {
              screenOptions={{headerShown: false}}
             >
                 <Stack.Screen name="Login" component={LoginScreen}/>    
+                <Stack.Screen name="Signin" component={SigninScreen}/>    
                 <Stack.Screen name="Home" component={HomeScreen}/>
                 <Stack.Screen name="addMed" component={AddForm}/>
             </Stack.Navigator>

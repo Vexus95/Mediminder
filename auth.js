@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
+  Alert,
   StyleSheet,
   Text,
   View,
@@ -14,6 +16,25 @@ import {
 function LoginScreen({navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const[AccountList, setAccountList] = useState([]);
+  
+  async function verif(){
+    const jsonValueString = await AsyncStorage.getItem('AccountList')
+    setAccountList(jsonValueString != null ? JSON.parse(jsonValueString) : [])
+    console.log(AccountList)
+    var i = 0;
+    console.log(email, " && ", password);
+    // console.log("jz suis la ", email, " && ", password)
+    for (;i != AccountList.length; i++)
+    {
+      if (AccountList[i].Email === email && AccountList[i].Mdp === password){
+        navigation.navigate('Home', {i})
+      }
+    }
+    Alert.alert('Mot de passe ou mail incrorrect')
+
+  }
+  
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -37,18 +58,19 @@ function LoginScreen({navigation}) {
       </View> 
       
       <TouchableOpacity>
-        <Text style={styles.forgot_button}>Mot de passe oublié?</Text> 
+        <Text style={styles.forgot_button} onPress={()=>Alert.alert('Dommage')}>Mot de passe oublié?</Text> 
       </TouchableOpacity> 
-      <TouchableOpacity style={styles.loginBtn} onPress={()=>navigation.navigate('Home')}>
+      <TouchableOpacity style={styles.loginBtn} onPress={verif}>
         <Text style={styles.loginText}>Connexion</Text> 
       </TouchableOpacity> 
       <Text style={styles.Or}>Ou</Text> 
-      <TouchableOpacity style={styles.loginBtn2} onPress={()=>navigation.navigate('Login')}>
+      <TouchableOpacity style={styles.loginBtn2} onPress={()=>navigation.navigate('Signin')}>
         <Text style={styles.loginText}>Créer un compte</Text> 
       </TouchableOpacity> 
     </View> 
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
